@@ -515,7 +515,7 @@ void Rigid0(void) {
 			double RefVec_ip1 = PrePos[i * 3 + 1] - CenterofGravity[1];
 			double RefVec_ip2 = PrePos[i * 3 + 2] - CenterofGravity[2];
 			double tmp = Dns[Typ[i]] * PARTICLE_DISTANCE*PARTICLE_DISTANCE*PARTICLE_DISTANCE;
-			? 単位おかしくね？
+			//? 単位おかしくね？
 			tq[0] += tmp * (RefVec_ip1*ChangeofPosition_2 - RefVec_ip2*ChangeofPosition_1);
 			tq[1] += tmp * (RefVec_ip2*ChangeofPosition_0 - RefVec_ip0*ChangeofPosition_2);
 			tq[2] += tmp * (RefVec_ip0*ChangeofPosition_1 - RefVec_ip1*ChangeofPosition_0);
@@ -602,7 +602,7 @@ void Rigid0(void) {
 	double qqy = qs0*py2 - qx0*pz2 + qy0*ps2 + qz0*px2;
 	double qqz = qs0*pz2 + qx0*py2 - qy0*px2 + qz0*ps2;
 
-	?微小変化になってなくね？
+	//?微小変化になってなくね？
 	double deltaRot00 = -2.0*(qy0*qy0 + qz0*qz0);
 	double deltaRot01 = 2.0*(qx0*qy0 - qs0*qz0);
 	double deltaRot02 = 2.0*(qx0*qz0 + qs0*qy0);

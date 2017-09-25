@@ -117,8 +117,17 @@ void mk_vtu() {
 	printf("done.\n");
 }
 
-
+// argcは引数の総個数(プログラム名も含む)(渡す必要なし)
 int main(int argc, char** argv){
+
+	// 引数で受け取る（バッチから）
+	char *fileNumber = argv[1];
+	double WAVE_HEIGHT = atof(argv[2]);
+	double CENTER_CUBE_X = atof(argv[3]);
+	double DNS_RIGID0 = atof(argv[4]);	//剛体密度
+	printf("fileNumber:%sbyte, WAVE_HEIGHT:%dbyte, CENTER_CUBE_X:%dbyte, DNS_RIGID0:%dbyte", sizeof(fileNumber), sizeof(WAVE_HEIGHT), sizeof(CENTER_CUBE_X), sizeof(DNS_RIGID0));
+	printf("fileNumber:%s, WAVE_HEIGHT:%f, CENTER_CUBE_X:%f, DNS_RIGID0:%f", fileNumber, WAVE_HEIGHT, CENTER_CUBE_X, DNS_RIGID0);
+
 
 	printf("start mk_particle\n");
 	printf("nx:%d ny:%d nz:%d nxyz:%d\n", nx, ny, nz,nxyz1);
@@ -151,7 +160,7 @@ int main(int argc, char** argv){
 			ParticleType[ip] = WALL;
 			NumberOfParticle++;
 		}
-		else if (x >= CENTER_CUBE_X/2 - CUBE_LENGTH / 2 && x < CENTER_CUBE_X / 2 + CUBE_LENGTH / 2 && y >= CENTER_CUBE_Y / 2 - CUBE_LENGTH / 2 && y < CENTER_CUBE_Y / 2 + CUBE_LENGTH / 2 && z >= CENTER_CUBE_Z / 2 - CUBE_LENGTH / 2 && z < CENTER_CUBE_Z / 2 + CUBE_LENGTH / 2) {
+		else if (x >= CENTER_CUBE_X - CUBE_LENGTH / 2 && x < CENTER_CUBE_X + CUBE_LENGTH / 2 && y >= CENTER_CUBE_Y - CUBE_LENGTH / 2 && y < CENTER_CUBE_Y + CUBE_LENGTH / 2 && z >= CENTER_CUBE_Z - CUBE_LENGTH / 2 && z < CENTER_CUBE_Z + CUBE_LENGTH / 2) {
 			ParticleType[ip] = RIGID0;
 			NumberOfParticle++;
 			nr0++;

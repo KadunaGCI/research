@@ -1,6 +1,16 @@
 #pragma once
 /*****************************************************************
 
+dam_break_testにおける可変パラメータ 引数で渡すこと
+
+*****************************************************************/
+
+//#define WAVE_HEIGHT 0.5
+//#define CENTER_CUBE_X 0.5
+//#define DNS_RIGID0 500	//剛体密度	
+
+/*****************************************************************
+
 	mk_particle.cppで利用
 
 *****************************************************************/
@@ -21,7 +31,7 @@
 
 #define RE  3  //3 4 5		PARTICLE_DISTANCE*(RE+0.1)が影響半径であることに注意
 
-#define WAVE_HEIGHT 0.5
+//#define WAVE_HEIGHT 0.5
 #define WAVE_WIDTH 0.25
 // 奥行きはmk_MAX_Y
 
@@ -29,7 +39,7 @@
 
 #define CUBE_LENGTH 0.1
 // 各面と平行におく
-#define CENTER_CUBE_X 0.25
+//#define CENTER_CUBE_X 0.5
 #define CENTER_CUBE_Y mk_MAX_Y/2
 #define CENTER_CUBE_Z CUBE_LENGTH/2
 
@@ -60,7 +70,7 @@
 
 #define DNS_FLUID 1000		//流体粒子の密度
 #define DNS_WALL 1000		//壁粒子の密度
-#define DNS_RIGID0 500	//剛体密度	
+//#define DNS_RIGID0 500	//剛体密度	
 
 #define DT 0.0005			//時間刻み幅
 #define dt_inv   double (1/DT)	
