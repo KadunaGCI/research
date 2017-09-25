@@ -1,4 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -10,7 +11,8 @@
 #include <malloc.h>
 #include "../params.h"
 
-#define IN_FILE "../data/init_position.prof"
+//#define IN_FILE "../data/init_position.prof"
+char IN_FILE[100];
 #define IN_DIR_VTU "../data"
 #define OUT_DIR_VTU "../data"
 
@@ -51,6 +53,10 @@ double InertiaTensorInv1[3][3];
 double InertiaTensorInv2[3][3];
 double alcSize;
 
+// batchに利用
+double DNS_RIGID0;	//剛体密度
+char *fileNumber;
+
 // vtuへの変換で利用
 int NumberOfParticle;
 int ProfFileNumber;
@@ -71,6 +77,7 @@ void ChkPcl(int i) {
 }
 
 void RdDat(void) {
+	sprintf(IN_FILE, "../data/init_position_%s.prof", fileNumber);
 	fopen_s(&fp, IN_FILE, "r");
 	fscanf_s(fp, "%d %d", &nP, &nr0);
 	printf("nP: %d\n", nP);
@@ -844,6 +851,29 @@ void setProfFileNum() {
 }
 
 int main(int argc, char** argv) {
+
+	// 引数で受け取る（バッチから）
+	if (argc == 2) {
+
+		char sp[] = ",";
+		char *tok;
+
+		tok = strtok(argv[1], sp);
+		fileNumber = tok;
+		tok = strtok(NULL, sp);
+		//WAVE_HEIGHT = atof(tok);
+		tok = strtok(NULL, sp);
+		//CENTER_CUBE_X = atof(tok);
+		tok = strtok(NULL, sp);
+		DNS_RIGID0 = atof(tok);	//剛体密度
+
+	}
+	else {
+		printf("%s", "error in args");
+		getchar();
+		return 1;
+	}
+
 	printf("start emps.\n");
 	RdDat();
 	AlcBkt();

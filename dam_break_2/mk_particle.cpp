@@ -1,14 +1,19 @@
+ï»¿#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include "../params.h"
 
-#define OUTPUT_FILE "../data/init_position.prof"
-#define IN_DATA OUTPUT_FILE
-#define OUT_DATA_VTU "../data/chk_init_position.vtu"
+//#define OUTPUT_FILE "../data/init_position.prof"
+//#define IN_DATA OUTPUT_FILE
+//#define OUT_DATA_VTU "../data/chk_init_position.vtu"
+char OUTPUT_FILE[100];
+char IN_DATA[100];
+char OUT_DATA_VTU[100];
 
-// —Ìˆæ
+// é ˜åŸŸ
 int nx = (int)((mk_MAX_X - mk_MIN_X) / PARTICLE_DISTANCE) + RE * 2;
 int ny = (int)((mk_MAX_Y - mk_MIN_Y) / PARTICLE_DISTANCE) + RE * 2;
 int nz = (int)((mk_MAX_Z - mk_MIN_Z) / PARTICLE_DISTANCE) + RE * 2;
@@ -38,8 +43,8 @@ double *pressave_vtu;
 //int *ParticleType;
 
 /*
-‰ŠúğŒ‚ğ•‚—V•¨‚É¨–§“x‚ğ’²®‚µ‚Ä•‚‚¢‚Ä‚¢‚é‚Æ‚±‚ë‚©‚ç
-—¬‘ÌŠO‚Éİ’u‚·‚é‚Ì‚Å‚ ‚ê‚ÎA•Ê‚ÌŒvZ’è‚ğì‚ê‚Î‚æ‚¢
+åˆæœŸæ¡ä»¶ã‚’æµ®éŠç‰©ã«â†’å¯†åº¦ã‚’èª¿æ•´ã—ã¦æµ®ã„ã¦ã„ã‚‹ã¨ã“ã‚ã‹ã‚‰
+æµä½“å¤–ã«è¨­ç½®ã™ã‚‹ã®ã§ã‚ã‚Œã°ã€åˆ¥ã®è¨ˆç®—å®šã‚’ä½œã‚Œã°ã‚ˆã„
 */
 
 void read_data() {
@@ -117,17 +122,37 @@ void mk_vtu() {
 	printf("done.\n");
 }
 
-// argc‚Íˆø”‚Ì‘ŒÂ”(ƒvƒƒOƒ‰ƒ€–¼‚àŠÜ‚Ş)(“n‚·•K—v‚È‚µ)
+// argcã¯å¼•æ•°ã®ç·å€‹æ•°(ãƒ—ãƒ­ã‚°ãƒ©ãƒ åã‚‚å«ã‚€)(æ¸¡ã™å¿…è¦ãªã—)
 int main(int argc, char** argv){
 
-	// ˆø”‚Åó‚¯æ‚éiƒoƒbƒ`‚©‚çj
-	char *fileNumber = argv[1];
-	double WAVE_HEIGHT = atof(argv[2]);
-	double CENTER_CUBE_X = atof(argv[3]);
-	double DNS_RIGID0 = atof(argv[4]);	//„‘Ì–§“x
-	printf("fileNumber:%sbyte, WAVE_HEIGHT:%dbyte, CENTER_CUBE_X:%dbyte, DNS_RIGID0:%dbyte", sizeof(fileNumber), sizeof(WAVE_HEIGHT), sizeof(CENTER_CUBE_X), sizeof(DNS_RIGID0));
-	printf("fileNumber:%s, WAVE_HEIGHT:%f, CENTER_CUBE_X:%f, DNS_RIGID0:%f", fileNumber, WAVE_HEIGHT, CENTER_CUBE_X, DNS_RIGID0);
+	// å¼•æ•°ã§å—ã‘å–ã‚‹ï¼ˆãƒãƒƒãƒã‹ã‚‰ï¼‰
+	char *fileNumber;
+	double WAVE_HEIGHT;
+	double CENTER_CUBE_X;
+	double DNS_RIGID0;	//å‰›ä½“å¯†åº¦
+	
+	if (argc == 2) {
+		
+		char sp[] = ",";
+		char *tok;
 
+		tok = strtok(argv[1], sp);
+		fileNumber = tok;
+		tok = strtok(NULL, sp);
+		WAVE_HEIGHT = atof(tok);
+		tok = strtok(NULL, sp);
+		CENTER_CUBE_X = atof(tok);
+		tok = strtok(NULL, sp);
+		DNS_RIGID0 = atof(tok);
+		sprintf(OUTPUT_FILE, "../data/init_position_%s.prof", fileNumber);
+		sprintf(IN_DATA, "../data/init_position_%s.prof", fileNumber);
+		sprintf(OUT_DATA_VTU, "../data/chk_init_position_%s.vtu", fileNumber);
+	}
+	else {
+		printf("%s", "error in args");
+		getchar();
+		return 1;
+	}
 
 	printf("start mk_particle\n");
 	printf("nx:%d ny:%d nz:%d nxyz:%d\n", nx, ny, nz,nxyz1);
@@ -174,7 +199,6 @@ int main(int argc, char** argv){
 	}
 
 	printf("NumberOfParticle:     %d\n",NumberOfParticle);
-
 	fopen_s(&fp, OUTPUT_FILE, "w");
 	fprintf(fp,"%d %d\n",NumberOfParticle,nr0);
 	int k=0;
