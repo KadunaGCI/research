@@ -4,7 +4,7 @@ setlocal enabledelayedexpansion
 REM  put on .exe files. 
 REM  "../data" and "../result" must exist upon .exe files' directory 
 
-for %%f in (%*) do (
+for /f %%a "skip=1" in (..\data\params.txt) do (
 
 rem get time
 set tmp_date=!date!
@@ -22,7 +22,7 @@ set path=..\result\!now!
 echo !path!
   
 md !path!
-call %%f
+call %1 %%a
   
 for /f "delims=," %%a in ('dir ..\data\output* /b /s') do (
   echo %%a
