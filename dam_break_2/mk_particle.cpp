@@ -74,6 +74,8 @@ void read_data() {
 
 void mk_vtu() {
 
+	printf("%s", OUT_DATA_VTU);
+
 	FILE *fp;
 	fopen_s(&fp, OUT_DATA_VTU, "w");
 	fprintf(fp, "<?xml version='1.0' encoding='UTF-8'?>\n");
