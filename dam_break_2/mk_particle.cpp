@@ -1,5 +1,7 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 
+// 塔の中の壁粒子を処理する必要あり？
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -164,40 +166,46 @@ int main(int argc, char** argv){
 	int NumberOfParticle = 0;
 
 	for(int iz=0;iz<nz;iz++){
-	for(int iy=0;iy<ny;iy++){
-	for(int ix=0;ix<nx;ix++){
-		int ip = iz*nxy + iy*nx + ix;
-		ParticleType[ip] = GHOST;
-		Position[ip*3  ] = mk_MIN_X + PARTICLE_DISTANCE*(ix-RE+0.5);
-		Position[ip * 3 + 1] = mk_MIN_Y + PARTICLE_DISTANCE*(iy-RE+0.5);
-		Position[ip * 3 + 2] = mk_MIN_Z + PARTICLE_DISTANCE*(iz-RE+0.5);
-	}}}
-
+		for(int iy=0;iy<ny;iy++){
+			for(int ix=0;ix<nx;ix++){
+			int ip = iz*nxy + iy*nx + ix;
+			ParticleType[ip] = GHOST;
+			Position[ip*3  ] = mk_MIN_X + PARTICLE_DISTANCE*(ix-RE+0.5);
+			Position[ip * 3 + 1] = mk_MIN_Y + PARTICLE_DISTANCE*(iy-RE+0.5);
+			Position[ip * 3 + 2] = mk_MIN_Z + PARTICLE_DISTANCE*(iz-RE+0.5);
+			}
+		}
+	}
 	int nr0 = 0;
 
 	for(int iz=0;iz<nz;iz++){
-	for(int iy=0;iy<ny;iy++){
-	for(int ix=0;ix<nx;ix++){
-		int ip = iz*nxy + iy*nx + ix;
-		double x = Position[ip * 3];
-		double y = Position[ip * 3 + 1];
-		double z = Position[ip * 3 + 2];
+		for(int iy=0;iy<ny;iy++){
+			for(int ix=0;ix<nx;ix++){
+				int ip = iz*nxy + iy*nx + ix;
+				double x = Position[ip * 3];
+				double y = Position[ip * 3 + 1];
+				double z = Position[ip * 3 + 2];
 
-		if (ix < RE || ix >= nx - RE || iy < RE || iy >= ny - RE || iz < RE){
-			ParticleType[ip] = WALL;
-			NumberOfParticle++;
+				if (ix < RE || iz < RE){
+					ParticleType[ip] = WALL;
+					NumberOfParticle++;
+				}
+				// (2.0, y/2, 0)を中心
+				else if (x >= 2.0 - 0.1 && x < 2.0 + 0.1 && y >= CENTER_CUBE_Y - 0.1  && y < CENTER_CUBE_Y + 0.1) {
+					ParticleType[ip] = WALL;
+					NumberOfParticle++;
+				}
+				else if (x >= CENTER_CUBE_X - CUBE_LENGTH / 2 && x < CENTER_CUBE_X + CUBE_LENGTH / 2 && y >= CENTER_CUBE_Y - CUBE_LENGTH  && y < CENTER_CUBE_Y + CUBE_LENGTH  && z >= CENTER_CUBE_Z - CUBE_LENGTH / 2 && z < CENTER_CUBE_Z + CUBE_LENGTH / 2) {
+					ParticleType[ip] = RIGID0;
+					NumberOfParticle++;
+					nr0++;
+				}
+				else if (z <= WAVE_HEIGHT&&x <= WAVE_WIDTH){
+					ParticleType[ip] = FLUID;
+					NumberOfParticle++;
+				}
+			}
 		}
-		else if (x >= CENTER_CUBE_X - CUBE_LENGTH / 2 && x < CENTER_CUBE_X + CUBE_LENGTH / 2 && y >= CENTER_CUBE_Y - CUBE_LENGTH / 2 && y < CENTER_CUBE_Y + CUBE_LENGTH / 2 && z >= CENTER_CUBE_Z - CUBE_LENGTH / 2 && z < CENTER_CUBE_Z + CUBE_LENGTH / 2) {
-			ParticleType[ip] = RIGID0;
-			NumberOfParticle++;
-			nr0++;
-		}
-		else if (z <= WAVE_HEIGHT&&x <= WAVE_WIDTH){
-			ParticleType[ip] = FLUID;
-			NumberOfParticle++;
-		}
-	}
-	}
 	}
 
 	printf("NumberOfParticle:     %d\n",NumberOfParticle);
@@ -205,13 +213,15 @@ int main(int argc, char** argv){
 	fprintf(fp,"%d %d\n",NumberOfParticle,nr0);
 	int k=0;
 	for(int iz=0;iz<nz;iz++){
-	for(int iy=0;iy<ny;iy++){
-	for(int ix=0;ix<nx;ix++){
-		int ip = iz*nxy + iy*nx + ix;
-		if(ParticleType[ip]==GHOST)continue;
-		fprintf(fp," %d %d %lf %lf %lf 0.0 0.0 0.0 0.0 0.0\n",k,ParticleType[ip],Position[ip*3],Position[ip*3+1],Position[ip*3+2]);
-		k++;
-	}}}
+		for(int iy=0;iy<ny;iy++){
+			for(int ix=0;ix<nx;ix++){
+				int ip = iz*nxy + iy*nx + ix;
+				if(ParticleType[ip]==GHOST)continue;
+					fprintf(fp," %d %d %lf %lf %lf 0.0 0.0 0.0 0.0 0.0\n",k,ParticleType[ip],Position[ip*3],Position[ip*3+1],Position[ip*3+2]);
+					k++;
+			}
+		}
+	}
 
 	fclose(fp);
 

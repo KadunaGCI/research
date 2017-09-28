@@ -19,9 +19,9 @@ dam_break_test‚É‚¨‚¯‚é‰Â•Ïƒpƒ‰ƒ[ƒ^ ˆø”‚Å“n‚·‚±‚Æ
 #define mk_MIN_X  0.0
 #define mk_MIN_Y  0.0
 #define mk_MIN_Z  0.0
-#define mk_MAX_X  1.0
-#define mk_MAX_Y  0.2
-#define mk_MAX_Z  0.6
+#define mk_MAX_X  2.5
+#define mk_MAX_Y  0.8
+#define mk_MAX_Z  1.0
 
 #define GHOST -1
 #define WALL  0

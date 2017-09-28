@@ -67,6 +67,17 @@ double *pressave;
 int *ParticleType;
 
 void ChkPcl(int i) {
+	// just revise y-axis
+	if (Pos[i * 3 + 1]>MAX_Y) {
+		while (Pos[i * 3 + 1] - MAX_Y>0) {
+			Pos[i * 3 + 1] -= MAX_Y;
+		}
+	}
+	else if (Pos[i * 3 + 1]<MIN_Y) {
+		while (Pos[i * 3 + 1] + MAX_Y<0) {
+			Pos[i * 3 + 1] += MAX_Y;
+		}
+	}
 	if (Pos[i * 3]>MAX_X || Pos[i * 3]<MIN_X ||
 		Pos[i * 3 + 1]>MAX_Y || Pos[i * 3 + 1]<MIN_Y ||
 		Pos[i * 3 + 2]>MAX_Z || Pos[i * 3 + 2]<MIN_Z)
